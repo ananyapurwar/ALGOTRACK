@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>Admin Dashboard - AlgoTrack</title>
+  <meta name="description" content="Admin Dashboard for AlgoTrack">
+  <meta name="theme-color" content="#000000" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="shortcut icon" href="images/favicon.png">
+
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons&display=swap">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css">
+  <link rel="stylesheet" href="styles/style.css">
+  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <style>
+    .admin-card {
+      padding: 20px;
+      overflow: auto;
+    }
+    .admin-title {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .user-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .user-table th, .user-table td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+    .user-table th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+    .user-table tr:hover {
+      background-color: #f5f5f5;
+    }
+    .user-handle {
+      color: #666;
+      font-size: 0.9em;
+    }
+    .admin-badge {
+      background-color: #4285F4;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      margin-left: 5px;
+    }
+    .tab-container {
+      margin-bottom: 20px;
+    }
+    .tab-button {
+      margin-right: 10px;
+      padding: 8px 16px;
+      background-color: #f2f2f2;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .tab-button.active {
+      background-color: #4285F4;
+      color: white;
+    }
+    .no-users {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+      <div class="mdl-layout__header-row">
+        <span class="mdl-layout-title">AlgoTrack Admin</span>
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <a href="index.html" class="mdl-button mdl-js-button mdl-js-ripple-effect"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i> Home <span class="mdl-ripple"></span></a>
+          <a href="/logout" class="mdl-button mdl-js-button mdl-js-ripple-effect"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">exit_to_app</i> Logout <span class="mdl-ripple"></span></a>
+        </nav>
+      </div>
+    </header>
+    <div class="mdl-layout__drawer mdl-layout--small-screen-only">
+      <span id='logo'>CFV</span>
+      <nav class="navigation mdl-navigation">
+        <a href="index.html" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i> Home </a>
+        <a href="/logout" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">exit_to_app</i> Logout</a>
+      </nav>
+    </div>
+    <main class="mdl-layout__content mdl-color--grey-100">
+      <div class="mdl-grid content">
+        <div class="admin-card mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+          <h2 class="admin-title">User Management</h2>
+
+          <div class="tab-container">
+            <button id="usersTabButton" class="tab-button active">Users</button>
+            <button id="credentialsTabButton" class="tab-button">User Credentials</button>
+          </div>
+
+          <!-- Users Tab -->
+          <div id="usersTableContainer">
+            <table class="user-table">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Handle</th>
+                  <th>User ID</th>
+                  <th>Role</th>
+                  <th>Joined</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <!-- User data will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Credentials Tab -->
+          <div id="credentialsTableContainer" style="display: none;">
+            <table class="user-table">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Password Hash</th>
+                  <th>Handle</th>
+                  <th>User ID</th>
+                  <th>Role</th>
+                </tr>
+              </thead>
+              <tbody id="credentialsTableBody">
+                <!-- Credentials data will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Fetch user data when the page loads
+    $(document).ready(function() {
+      // Load users tab by default
+      loadUsersTab();
+
+      // Tab switching
+      $('#usersTabButton').click(function() {
+        $(this).addClass('active');
+        $('#credentialsTabButton').removeClass('active');
+        $('#usersTableContainer').show();
+        $('#credentialsTableContainer').hide();
+      });
+
+      $('#credentialsTabButton').click(function() {
+        $(this).addClass('active');
+        $('#usersTabButton').removeClass('active');
+        $('#credentialsTableContainer').show();
+        $('#usersTableContainer').hide();
+        loadCredentialsTab();
+      });
+    });
+
+    // Load users tab data
+    function loadUsersTab() {
+      $.ajax({
+        url: '/api/admin/users',
+        method: 'GET',
+        success: function(users) {
+          if (users.length === 0) {
+            $('#usersTableContainer').html('<p class="no-users">No users found</p>');
+            return;
+          }
+
+          let tableHtml = '';
+          users.forEach(function(user) {
+            const joinDate = new Date(user.created_at).toLocaleString();
+            const isAdmin = user.is_admin === 1;
+            const roleBadge = isAdmin ? '<span class="admin-badge">Admin</span>' : 'User';
+
+            tableHtml += `
+              <tr>
+                <td>${user.username}</td>
+                <td class="user-handle">${user.handle || '-'}</td>
+                <td>${user.id}</td>
+                <td>${roleBadge}</td>
+                <td>${joinDate}</td>
+              </tr>
+            `;
+          });
+
+          $('#usersTableBody').html(tableHtml);
+        },
+        error: function(xhr, status, error) {
+          console.error('Error fetching users:', error);
+          $('#usersTableContainer').html('<p class="no-users">Error loading users. Please try again.</p>');
+        }
+      });
+    }
+
+    // Load credentials tab data
+    function loadCredentialsTab() {
+      $.ajax({
+        url: '/api/admin/user-credentials',
+        method: 'GET',
+        success: function(users) {
+          if (users.length === 0) {
+            $('#credentialsTableContainer').html('<p class="no-users">No users found</p>');
+            return;
+          }
+
+          let tableHtml = '';
+          users.forEach(function(user) {
+            const isAdmin = user.is_admin === 1;
+            const roleBadge = isAdmin ? '<span class="admin-badge">Admin</span>' : 'User';
+
+            tableHtml += `
+              <tr>
+                <td>${user.username}</td>
+                <td><code>${user.password}</code></td>
+                <td class="user-handle">${user.handle || '-'}</td>
+                <td>${user.id}</td>
+                <td>${roleBadge}</td>
+              </tr>
+            `;
+          });
+
+          $('#credentialsTableBody').html(tableHtml);
+        },
+        error: function(xhr, status, error) {
+          console.error('Error fetching credentials:', error);
+          $('#credentialsTableContainer').html('<p class="no-users">Error loading credentials. Please try again.</p>');
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

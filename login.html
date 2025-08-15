@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>Login - AlgoTrack</title>
+  <meta name="description" content="Login to AlgoTrack">
+  <meta name="theme-color" content="#ffd700" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="shortcut icon" href="images/favicon.png">
+
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons&display=swap">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.amber-yellow.min.css">
+  <link rel="stylesheet" href="styles/style.css">
+  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <style>
+    .login-card {
+      padding: 40px;
+      text-align: center;
+      max-width: 500px;
+      margin: 100px auto;
+    }
+    .login-title {
+      margin-bottom: 30px;
+      color: #ffd700;
+    }
+    .login-form {
+      text-align: left;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+    .login-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .error-message {
+      color: #d50000;
+      font-size: 12px;
+      margin-top: 10px;
+      display: none;
+    }
+    .register-link {
+      margin-top: 20px;
+      display: block;
+      color: #ffd700;
+      cursor: pointer;
+    }
+    .register-form {
+      display: none;
+    }
+    .back-to-login {
+      margin-top: 20px;
+      display: block;
+      color: #ffd700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+      <div class="mdl-layout__header-row">
+        <span class="mdl-layout-title">AlgoTrack</span>
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <a href="index.html" class="mdl-button mdl-js-button mdl-js-ripple-effect"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i> Home <span class="mdl-ripple"></span></a>
+          <a href="compare.html" class="mdl-button mdl-js-button mdl-js-ripple-effect"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">compare</i> Compare<span class="mdl-ripple"></span></a>
+        </nav>
+      </div>
+    </header>
+    <div class="mdl-layout__drawer mdl-layout--small-screen-only">
+      <span id='logo'>CFV</span>
+      <nav class="navigation mdl-navigation">
+        <a href="index.html" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i> Home </a>
+        <a href="compare.html" class="mdl-navigation__link"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">compare</i> Compare</a>
+      </nav>
+    </div>
+    <main class="mdl-layout__content mdl-color--grey-100">
+      <div class="mdl-grid content">
+        <div class="login-card mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+          <h2 class="login-title">Login to AlgoTrack</h2>
+
+          <!-- Login Form -->
+          <div id="loginFormContainer">
+            <p>Sign in with your username and password.</p>
+            <div class="login-form">
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="loginUsername">
+                <label class="mdl-textfield__label" for="loginUsername">Username</label>
+              </div>
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="password" id="loginPassword">
+                <label class="mdl-textfield__label" for="loginPassword">Password</label>
+              </div>
+              <div class="login-actions">
+                <button id="loginButton" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                  Login
+                </button>
+              </div>
+              <div id="loginError" class="error-message"></div>
+              <a class="register-link" id="showRegisterForm">Don't have an account? Register here</a>
+            </div>
+          </div>
+
+          <!-- Register Form -->
+          <div id="registerFormContainer" class="register-form">
+            <p>Create a new account.</p>
+            <div class="login-form">
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="registerUsername">
+                <label class="mdl-textfield__label" for="registerUsername">Username</label>
+              </div>
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="password" id="registerPassword">
+                <label class="mdl-textfield__label" for="registerPassword">Password</label>
+              </div>
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="registerHandle">
+                <label class="mdl-textfield__label" for="registerHandle">Codeforces Handle (optional)</label>
+              </div>
+              <div class="login-actions">
+                <button id="registerButton" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                  Register
+                </button>
+              </div>
+              <div id="registerError" class="error-message"></div>
+              <a class="back-to-login" id="backToLogin">Already have an account? Login here</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script>
+    $(document).ready(function() {
+      // Show/hide forms
+      $('#showRegisterForm').click(function() {
+        $('#loginFormContainer').hide();
+        $('#registerFormContainer').show();
+      });
+
+      $('#backToLogin').click(function() {
+        $('#registerFormContainer').hide();
+        $('#loginFormContainer').show();
+      });
+
+      // Login form submission
+      $('#loginButton').click(function() {
+        const username = $('#loginUsername').val();
+        const password = $('#loginPassword').val();
+
+        // Clear previous errors
+        $('#loginError').hide();
+
+        if (!username || !password) {
+          $('#loginError').text('Please enter both username and password').show();
+          return;
+        }
+
+        // Send login request
+        $.ajax({
+          url: '/api/login',
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({ username, password }),
+          success: function(response) {
+            if (response.success) {
+              // Redirect based on user role
+              if (response.isAdmin) {
+                window.location.href = '/admin';
+              } else {
+                window.location.href = '/';
+              }
+            } else {
+              $('#loginError').text('Login failed').show();
+            }
+          },
+          error: function(xhr) {
+            const errorMessage = xhr.responseJSON && xhr.responseJSON.error ?
+              xhr.responseJSON.error : 'Login failed. Please try again.';
+            $('#loginError').text(errorMessage).show();
+          }
+        });
+      });
+
+      // Register form submission
+      $('#registerButton').click(function() {
+        const username = $('#registerUsername').val();
+        const password = $('#registerPassword').val();
+        const handle = $('#registerHandle').val();
+
+        // Clear previous errors
+        $('#registerError').hide();
+
+        if (!username || !password) {
+          $('#registerError').text('Please enter both username and password').show();
+          return;
+        }
+
+        // Send registration request
+        $.ajax({
+          url: '/api/register',
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({ username, password, handle }),
+          success: function(response) {
+            if (response.success) {
+              window.location.href = '/';
+            } else {
+              $('#registerError').text('Registration failed').show();
+            }
+          },
+          error: function(xhr) {
+            const errorMessage = xhr.responseJSON && xhr.responseJSON.error ?
+              xhr.responseJSON.error : 'Registration failed. Please try again.';
+            $('#registerError').text(errorMessage).show();
+          }
+        });
+      });
+
+      // Handle Enter key press
+      $('#loginUsername, #loginPassword').keypress(function(e) {
+        if (e.which === 13) {
+          $('#loginButton').click();
+        }
+      });
+
+      $('#registerUsername, #registerPassword, #registerHandle').keypress(function(e) {
+        if (e.which === 13) {
+          $('#registerButton').click();
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
